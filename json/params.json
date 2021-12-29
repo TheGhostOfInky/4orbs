@@ -1,4 +1,10 @@
 {
+  "axes": [
+    "econ",
+    "dipl",
+    "govt",
+    "scty"
+  ],
   "colors": {
     "econ": [
       "#860900",
@@ -63,7 +69,7 @@
       "Moderate",
       "Liberal",
       "Libertarian",
-      "Anarchist" 
+      "Anarchist"
     ],
     "scty": [
       "Revolutionary",

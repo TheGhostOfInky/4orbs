@@ -1,15 +1,16 @@
 import { makeCanvas } from "./canvas.js";
 
-function getQueryVariable(variable){
-       var query = window.location.search.substring(1)
-       var vars = query.split("&")
-       for (var i=0;i<vars.length;i++) {
-               var pair = vars[i].split("=")
-               if(pair[0] == variable) {return parseFloat(pair[1])}
+function getQueryVariable(variable):number{
+       let query: string = window.location.search.substring(1)
+       let vars: Array<string> = query.split("&")
+       for (let i: number=0; i<vars.length; i++) {
+               let pair: Array<string> = vars[i].split("=")
+               if(pair[0] == variable) {
+                   return parseFloat(pair[1])
+                }
        }
        return(NaN);
 }
-
 
 window.onload = async () => {
     const canvas = <HTMLCanvasElement> document.getElementById("orbcanvas")
