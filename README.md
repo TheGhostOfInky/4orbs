@@ -1,0 +1,2 @@
+## What is 4Orbs?
+4Orbs is an experiment at a new way to display results of politcal (and maybe of other types too?) tests, it is currently a proof of concept only and is using 8values' questions and axes.
