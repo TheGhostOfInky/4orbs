@@ -1,4 +1,4 @@
-questions = [
+[
     {
         "question": "Oppression by corporations is more of a concern than oppression by governments.",
         "effect": {
@@ -629,4 +629,4 @@ questions = [
             "scty": -10
         }
     }
-];
+]

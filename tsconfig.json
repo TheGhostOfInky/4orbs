@@ -3,6 +3,7 @@
             "outDir": "dist",
             "rootDir": "src",
             "sourceMap": true,
+            "module": "es2022",
             "target": "ES2021"
     }
 }
