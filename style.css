@@ -118,10 +118,6 @@ a {
     cursor: pointer;
 }
 
-.small_button:hover, .small_button:focus {
-    background: #222;
-}
-
 #orbcanvas {
     border-color: #444444;
     border-style: solid;
@@ -161,9 +157,6 @@ a {
         background-color: #888;
         color: white;
     }
-    .small_button:hover, .small_button:focus {
-        background: #222;
-    } 
     #orbcanvas {
         border-color: #000;
     }
