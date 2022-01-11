@@ -24,14 +24,6 @@ window.onload = async () => {
 function init_question() {
     document.getElementById("question-text").innerHTML = questions[qn].question;
     document.getElementById("question-number").innerHTML = "Question " + (qn + 1) + " of " + (questions.length);
-    if (qn == 0) {
-        document.getElementById("back_button").style.display = 'none';
-        document.getElementById("back_button_off").style.display = 'block';
-    } else {
-        document.getElementById("back_button").style.display = 'block';
-        document.getElementById("back_button_off").style.display = 'none';
-    }
-
 }
 
 function next_question(mult) {
@@ -49,7 +41,7 @@ function next_question(mult) {
 
 function prev_question() {
     if (qn == 0) {
-        return;
+        window.history.back()
     }
     qn--;
     init_question();

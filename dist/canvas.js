@@ -1,18 +1,18 @@
 export function makeCanvas(canvas, score, params) {
     let ctx = canvas.getContext("2d");
-    let H = 150 + 175 * params.axes.length;
-    canvas.width = 800;
+    let H = 200 + 175 * params.axes.length;
+    canvas.width = 850;
     canvas.height = H;
     ctx.fillStyle = "#DDD";
-    ctx.fillRect(0, 0, 800, H);
+    ctx.fillRect(0, 0, 850, H);
     ctx.fillStyle = "#000";
     ctx.textAlign = "left";
-    ctx.font = "700 80px Montserrat";
+    ctx.font = "700 120px Dongle";
     ctx.fillText("4Orbs", 20, 90);
     ctx.textAlign = "right";
-    ctx.font = "300 30px Montserrat";
-    ctx.fillText("theghostofinky.github.io/4orbs", 780, 60);
-    ctx.fillText("proof of concept", 780, 90);
+    ctx.font = "400 50px Dongle";
+    ctx.fillText("theghostofinky.github.io/4orbs", 830, 60);
+    ctx.fillText("proof of concept", 830, 90);
     for (let i = 0; i < params.axes.length; i++) {
         drawScore(ctx, score[params.axes[i]], params, params.axes[i], 250 + 175 * i);
     }
@@ -20,19 +20,20 @@ export function makeCanvas(canvas, score, params) {
 function drawScore(ctx, score, params, axis, height) {
     let fg = "#000";
     ctx.fillStyle = fg;
-    ctx.fillRect(100, height - 2, 600, 4);
+    ctx.fillRect(125, height - 2, 600, 4);
     for (let i = 0; i < 7; i++) {
-        let X = 100 + 100 * i;
+        let X = 125 + 100 * i;
         drawCircle(ctx, X, height, 12, fg);
         drawCircle(ctx, X, height, 8, params.colors[axis][i]);
     }
     if (score <= 100 && score >= 0) {
-        let match = Math.round((score / 100) * 6);
-        let X = 100 + 100 * match;
+        let match = Math.round((score / 100) * 6.98 - 0.49);
+        console.log(match);
+        let X = 125 + 100 * match;
         drawCircle(ctx, X, height, 60, fg);
         drawCircle(ctx, X, height, 52, params.colors[axis][match]);
         ctx.textAlign = "center";
-        ctx.font = "300 30px Montserrat";
+        ctx.font = "400 50px Dongle";
         ctx.fillStyle = fg;
         ctx.fillText(params.labels[axis][match], X, height - 70);
         let image = new Image();

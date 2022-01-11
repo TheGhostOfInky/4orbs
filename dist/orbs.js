@@ -15,10 +15,10 @@ window.onload = async () => {
     let params = await fetch("json/params.json")
         .then(response => response.json());
     let score = {
-        "econ": (100 - getQueryVariable("e")),
-        "dipl": (100 - getQueryVariable("d")),
+        "econ": getQueryVariable("e"),
+        "dipl": getQueryVariable("d"),
         "govt": getQueryVariable("g"),
-        "scty": (100 - getQueryVariable("s"))
+        "scty": getQueryVariable("s")
     };
     makeCanvas(canvas, score, params);
 };

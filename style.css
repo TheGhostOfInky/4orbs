@@ -1,4 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Roboto:wght@400;700&display=swap');
+@font-face {
+    font-family: 'Dongle';
+    font-weight: 400;
+    src: url("./assets/Dongle-Regular.ttf");
+}
+@font-face {
+    font-family: 'Dongle';
+    font-weight: 700;
+    src: url("./assets/Dongle-Bold.ttf");
+}
 html {
     background-color: #bbbbbb;
     padding: 0px;
@@ -17,7 +26,7 @@ body {
 }
 p {
     color: #444444;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Dongle', sans-serif;
     font-size: 18.5pt;
     line-height: 1.15;
     margin: 4pt;
@@ -25,7 +34,7 @@ p {
 p.question {
     margin: 16pt auto;
     color: #333333;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Dongle', sans-serif;
     font-weight: normal;
     width: 70%;
     min-width: 500pt;
@@ -33,7 +42,7 @@ p.question {
     background-color: #eeeeee;
     padding: 16pt;
     border-radius: 16pt;
-    font-size: 36pt;
+    font-size: 48pt;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -42,41 +51,41 @@ p.question {
 }
 h1 {
     color: #222222;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 72pt;
+    font-family: 'Dongle', sans-serif;
+    font-size: 96pt;
     text-align: center;
-    line-height: 72pt;
+    line-height: 96pt;
     margin-top: 0pt;
     margin-bottom: 0pt;
 }
 h2 {
     color: #333333;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 34pt;
-    line-height: 36pt;
+    font-family: 'Dongle', sans-serif;
+    font-size: 52pt;
+    line-height: 52pt;
     margin-top: 12pt;
     margin-bottom: 10pt;
 }
 li {
-    font-size: 16pt;
-    text-indent: 16pt;
+    font-size: 24pt;
+    text-indent: 24pt;
 }
 a {
     font-family: inherit;
 }
 .button {
     background-color: #2196f3;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Dongle', sans-serif;
     border: none;
     border-radius: 8pt;
     color: white;
-    padding: 8pt;
+    padding: 0pt;
     width: 50%;
     min-width: 500pt;
     text-align: center;
     text-decoration: none;
     display: block;
-    font-size: 24pt;
+    font-size: 32pt;
     margin: -2px auto;
     cursor: pointer;
 }
@@ -92,33 +101,25 @@ a {
 .stronglyDisagree { background: #b71c1c; }
 .stronglyDisagree:hover, .stronglyDisagree:focus { background: #a00e0e; }
 
-.small_button, .small_button_off {
+.small_button {
     background-color: #333;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Dongle', sans-serif;
     border: none;
     border-radius: 8pt;
     color: white;
-    padding: 8pt;
+    padding: 0pt;
     width: 10%;
     min-width: 100pt;
     text-align: center;
     text-decoration: none;
     display: block;
-    font-size: 18pt;
+    font-size: 24pt;
     margin: -2px auto;
     cursor: pointer;
 }
 
 .small_button:hover, .small_button:focus {
     background: #222;
-}
-
-.small_button_off {
-    background-color: #ddd;
-    color: #888;
-    border: 2px solid #888;
-    cursor: not-allowed;
-    margin: -4px auto;
 }
 
 #orbcanvas {
@@ -130,4 +131,40 @@ a {
     margin: 8pt;
     margin-left: auto;
     margin-right: auto;
+}
+
+#disclaimer {
+    text-align: center;
+}
+@media (prefers-color-scheme: dark) {
+    html {
+        background-color: #555;
+    }
+    body {
+        background-color: #222;
+        border-color: #333;
+    }
+    p {
+        color: #FFF;
+    }
+    p.question {
+        color: #FFF;
+        background-color: #333;   
+    }
+    h1 {
+        color: #FFF;
+    }
+    h2 {
+        color: #FFF;
+    }
+    .small_button {
+        background-color: #888;
+        color: white;
+    }
+    .small_button:hover, .small_button:focus {
+        background: #222;
+    } 
+    #orbcanvas {
+        border-color: #000;
+    }
 }
