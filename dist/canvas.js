@@ -28,7 +28,6 @@ function drawScore(ctx, score, params, axis, height) {
     }
     if (score <= 100 && score >= 0) {
         let match = Math.round((score / 100) * 6.98 - 0.49);
-        console.log(match);
         let X = 125 + 100 * match;
         drawCircle(ctx, X, height, 60, fg);
         drawCircle(ctx, X, height, 52, params.colors[axis][match]);

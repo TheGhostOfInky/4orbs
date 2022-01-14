@@ -1,4 +1,16 @@
-export function makeCanvas(canvas, score: Object, params){
+export type param = {
+    axes: Array<string>;
+    colors: {
+        [key: string]: Array<string>;
+    };
+    labels: {
+        [key: string]: Array<string>;
+    };
+    images: {
+        [key: string]: Array<string>;
+    };
+}
+export function makeCanvas(canvas: HTMLCanvasElement, score: Object, params: param): void {
     let ctx = <CanvasRenderingContext2D> canvas.getContext("2d")
     let H: number = 200 + 175*params.axes.length
     canvas.width = 850
@@ -6,11 +18,11 @@ export function makeCanvas(canvas, score: Object, params){
     ctx.fillStyle = "#DDD"
     ctx.fillRect(0,0,850,H)
     ctx.fillStyle = "#000"
-    ctx.textAlign="left"
-    ctx.font="700 120px Dongle"
+    ctx.textAlign = "left"
+    ctx.font = "700 120px Dongle"
     ctx.fillText("4Orbs", 20, 90)
-    ctx.textAlign="right"
-    ctx.font="400 50px Dongle"
+    ctx.textAlign = "right"
+    ctx.font = "400 50px Dongle"
     ctx.fillText("theghostofinky.github.io/4orbs", 830, 60)
     ctx.fillText("proof of concept", 830, 90)
     for(let i: number = 0; i < params.axes.length; i++ ){
@@ -18,7 +30,7 @@ export function makeCanvas(canvas, score: Object, params){
     }
 }
 
-function drawScore(ctx, score:number, params, axis:string, height:number){
+function drawScore(ctx: CanvasRenderingContext2D, score:number, params: param, axis:string, height:number): void {
     let fg: string = "#000"
     ctx.fillStyle = fg
     ctx.fillRect(125,height-2,600,4)
@@ -29,15 +41,14 @@ function drawScore(ctx, score:number, params, axis:string, height:number){
     }
     if(score<=100 && score>=0){
         let match: number = Math.round((score/100)*6.98 - 0.49)
-        console.log(match)
         let X: number = 125 + 100*match
         drawCircle(ctx,X,height,60,fg)
         drawCircle(ctx,X,height,52,params.colors[axis][match])
-        ctx.textAlign="center"
-        ctx.font="400 50px Dongle"
-        ctx.fillStyle= fg
+        ctx.textAlign = "center"
+        ctx.font = "400 50px Dongle"
+        ctx.fillStyle = fg
         ctx.fillText(params.labels[axis][match],X,height-70)
-        let image = new Image()
+        let image = <HTMLImageElement> new Image()
         image.src = "assets/" + params.images[axis][match]
         image.addEventListener(
             'load',
@@ -47,7 +58,7 @@ function drawScore(ctx, score:number, params, axis:string, height:number){
     }
 }
 
-function drawCircle(ctx, X:number, Y:number, radius:number, color:string){
+function drawCircle(ctx: CanvasRenderingContext2D, X:number, Y:number, radius:number, color:string): void {
     ctx.fillStyle = color
     ctx.beginPath()
     ctx.arc(X,Y,radius,0,2*Math.PI)

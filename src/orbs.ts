@@ -1,6 +1,10 @@
 import { makeCanvas } from "./canvas.js";
+import type { param } from "./canvas";
+type score = {
+    [key: string]: Number;
+}
 
-function getQueryVariable(variable):number{
+function getQueryVariable(variable): number {
        let query: string = window.location.search.substring(1)
        let vars: Array<string> = query.split("&")
        for (let i: number=0; i<vars.length; i++) {
@@ -12,11 +16,11 @@ function getQueryVariable(variable):number{
        return(NaN);
 }
 
-window.onload = async () => {
+window.onload = async (): Promise<void> => {
     const canvas = <HTMLCanvasElement> document.getElementById("orbcanvas")
-    let params = await fetch("json/params.json")
+    let params: param = await fetch("json/params.json")
         .then(response => response.json())
-    let score = {
+    let score: score = {
         "econ" : getQueryVariable("e"),
         "dipl" : getQueryVariable("d"),
         "govt" : getQueryVariable("g"),
