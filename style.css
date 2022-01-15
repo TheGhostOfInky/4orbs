@@ -122,6 +122,11 @@ a {
     max-width: 100%;
 }
 
+#hidden {
+    font-size: 1%;
+    color:#dddddd;
+}
+
 #disclaimer {
     text-align: center;
 }
@@ -152,5 +157,8 @@ a {
     }
     #orbcanvas {
         border-color: #000;
+    }
+    #hidden {
+        color: #222;
     }
 }
