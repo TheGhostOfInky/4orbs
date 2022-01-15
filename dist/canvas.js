@@ -26,7 +26,7 @@ function drawScore(ctx, score, params, axis, height) {
         drawCircle(ctx, X, height, 12, fg);
         drawCircle(ctx, X, height, 8, params.colors[axis][i]);
     }
-    if (score <= 7 && score >= 0) {
+    if (score <= 6 && score >= 0) {
         let X = 125 + 100 * score;
         drawCircle(ctx, X, height, 60, fg);
         drawCircle(ctx, X, height, 52, params.colors[axis][score]);
