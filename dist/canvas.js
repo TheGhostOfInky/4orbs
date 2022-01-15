@@ -1,4 +1,4 @@
-export function makeCanvas(canvas, score, params) {
+export function makeCanvas(canvas, scores, params) {
     let ctx = canvas.getContext("2d");
     let H = 200 + 175 * params.axes.length;
     canvas.width = 850;
@@ -14,7 +14,7 @@ export function makeCanvas(canvas, score, params) {
     ctx.fillText("theghostofinky.github.io/4orbs", 830, 60);
     ctx.fillText("proof of concept", 830, 90);
     for (let i = 0; i < params.axes.length; i++) {
-        drawScore(ctx, score[params.axes[i]], params, params.axes[i], 250 + 175 * i);
+        drawScore(ctx, scores[params.axes[i]], params, params.axes[i], 250 + 175 * i);
     }
 }
 function drawScore(ctx, score, params, axis, height) {
@@ -26,17 +26,16 @@ function drawScore(ctx, score, params, axis, height) {
         drawCircle(ctx, X, height, 12, fg);
         drawCircle(ctx, X, height, 8, params.colors[axis][i]);
     }
-    if (score <= 100 && score >= 0) {
-        let match = Math.round((score / 100) * 6.98 - 0.49);
-        let X = 125 + 100 * match;
+    if (score <= 7 && score >= 0) {
+        let X = 125 + 100 * score;
         drawCircle(ctx, X, height, 60, fg);
-        drawCircle(ctx, X, height, 52, params.colors[axis][match]);
+        drawCircle(ctx, X, height, 52, params.colors[axis][score]);
         ctx.textAlign = "center";
         ctx.font = "400 50px Dongle";
         ctx.fillStyle = fg;
-        ctx.fillText(params.labels[axis][match], X, height - 70);
+        ctx.fillText(params.labels[axis][score], X, height - 70);
         let image = new Image();
-        image.src = "assets/" + params.images[axis][match];
+        image.src = "assets/" + params.images[axis][score];
         image.addEventListener('load', () => ctx.drawImage(image, X - 40, height - 40, 80, 80), false);
     }
 }

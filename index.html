@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link href='style.css' rel='stylesheet' type='text/css'>
+<link href='style.css' rel='stylesheet' type='text/css'/>
 <title>4Orbs Quiz</title>
-<link rel="icon" type="image/svg+xml" href="assets/icon.svg">
-<link rel="shortcut icon" type="image/svg+xml" href="assets/icon.svg">
+<link rel="icon" type="image/svg+xml" href="assets/icon.svg"/>
+<link rel="shortcut icon" type="image/svg+xml" href="assets/icon.svg"/>
 <meta charset="utf-8">
 </head>
 <body>
@@ -12,12 +12,7 @@
 <hr>
 <h2 style="text-align:center;" id="question-number">Loading...</h2>
 <p class="question" id="question-text"></p>
-<button class="button stronglyAgree" onclick="next_question( 1.0)">Strongly Agree</button> <br>
-<button class="button agree" onclick="next_question( 0.5)">Agree</button> <br>
-<button class="button neutral" onclick="next_question( 0.0)">Neutral/Unsure</button> <br>
-<button class="button disagree" onclick="next_question(-0.5)">Disagree</button> <br>
-<button class="button stronglyDisagree" onclick="next_question(-1.0)">Strongly Disagree</button> <br>
-<button class="small_button" onclick="prev_question()" id="back_button">Back</button>
-<script src="dist/quiz.js"></script>
+<div id="button_holder"></div>
+<script type="module" src="dist/quiz.js"></script>
 </body>
 </html>

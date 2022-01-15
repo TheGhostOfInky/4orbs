@@ -1,35 +1,69 @@
 let questions;
-let qn = 0;
-let max_econ, max_dipl, max_govt, max_scty; // Max possible scores
-max_econ = max_dipl = max_govt = max_scty = 0;
-let econ_array;
-let dipl_array;
-let govt_array;
-let scty_array;
-window.onload = async () => {
-    questions = await fetch("json/questions.json")
+let qn;
+let max = {};
+let userScore = {};
+let params;
+window.onload = () => select_quiz();
+async function select_quiz() {
+    params = await fetch("json/params.json")
         .then(response => response.json());
-    econ_array = new Array(questions.length);
-    dipl_array = new Array(questions.length);
-    govt_array = new Array(questions.length);
-    scty_array = new Array(questions.length);
+    document.getElementById("question-text").innerHTML = "Select a test to take:";
+    document.getElementById("question-number").innerHTML = "Test selection";
+    let buttonholder = document.getElementById("button_holder");
+    while (buttonholder.firstChild) {
+        buttonholder.removeChild(buttonholder.firstChild);
+    }
+    for (const quiz in params.quizzes) {
+        let newbutton = document.createElement("BUTTON");
+        newbutton.innerHTML = params.quizzes[quiz].name;
+        newbutton.classList.add("button");
+        newbutton.addEventListener("click", () => parse_questions(params.quizzes[quiz].url));
+        buttonholder.appendChild(newbutton);
+    }
+}
+async function parse_questions(url) {
+    qn = 0;
+    questions = await fetch(url)
+        .then(response => response.json());
+    let buttonholder = document.getElementById("button_holder");
+    while (buttonholder.firstChild) {
+        buttonholder.removeChild(buttonholder.firstChild);
+    }
+    for (const button in params.buttons) {
+        let newbutton = document.createElement("BUTTON");
+        newbutton.innerHTML = params.buttons[button].text;
+        newbutton.classList.add("button");
+        newbutton.classList.add(button);
+        newbutton.addEventListener("click", () => next_question(params.buttons[button].weight));
+        buttonholder.appendChild(newbutton);
+    }
+    let newbutton = document.createElement("BUTTON");
+    newbutton.innerHTML = "back";
+    newbutton.classList.add("small_button");
+    newbutton.addEventListener("click", () => prev_question());
+    buttonholder.appendChild(newbutton);
+    for (const i in params.axes) {
+        const axis = params.axes[i];
+        userScore[axis] = new Array(questions.length);
+        max[axis] = 0;
+    }
     for (let i = 0; i < questions.length; i++) {
-        max_econ += Math.abs(questions[i].effect.econ);
-        max_dipl += Math.abs(questions[i].effect.dipl);
-        max_govt += Math.abs(questions[i].effect.govt);
-        max_scty += Math.abs(questions[i].effect.scty);
+        for (const n in params.axes) {
+            const axis = params.axes[n];
+            max[axis] += Math.abs(questions[i].effect[axis]);
+        }
     }
     init_question();
-};
+}
 function init_question() {
     document.getElementById("question-text").innerHTML = questions[qn].question;
     document.getElementById("question-number").innerHTML = "Question " + (qn + 1) + " of " + (questions.length);
 }
 function next_question(mult) {
-    econ_array[qn] = mult * questions[qn].effect.econ;
-    dipl_array[qn] = mult * questions[qn].effect.dipl;
-    govt_array[qn] = mult * questions[qn].effect.govt;
-    scty_array[qn] = mult * questions[qn].effect.scty;
+    for (const i in params.axes) {
+        const axis = params.axes[i];
+        userScore[axis][qn] = mult * questions[qn].effect[axis];
+    }
     qn++;
     if (qn < questions.length) {
         init_question();
@@ -40,23 +74,22 @@ function next_question(mult) {
 }
 function prev_question() {
     if (qn == 0) {
-        window.history.back();
+        select_quiz();
     }
-    qn--;
-    init_question();
-}
-function calc_score(score, max) {
-    return (100 * (max + score) / (2 * max)).toFixed(1);
+    else {
+        qn--;
+        init_question();
+    }
 }
 function results() {
-    let final_econ = econ_array.reduce((a, b) => a + b, 0);
-    let final_dipl = dipl_array.reduce((a, b) => a + b, 0);
-    let final_govt = govt_array.reduce((a, b) => a + b, 0);
-    let final_scty = scty_array.reduce((a, b) => a + b, 0);
-    location.href = `results.html`
-        + `?e=${calc_score(final_econ, max_econ)}`
-        + `&d=${calc_score(final_dipl, max_dipl)}`
-        + `&g=${calc_score(final_govt, max_govt)}`
-        + `&s=${calc_score(final_scty, max_scty)}`;
+    let finalScores = {};
+    for (const i in params.axes) {
+        const axis = params.axes[i];
+        const total = userScore[axis].reduce((a, b) => a + b, 0);
+        const ratio = (max[axis] + total) / (2 * max[axis]);
+        finalScores[axis] = Math.round(ratio * 6.98 - 0.49);
+    }
+    location.href = "results.html?" + btoa(JSON.stringify(finalScores));
 }
+export {};
 //# sourceMappingURL=quiz.js.map

@@ -5,6 +5,38 @@
     "govt",
     "scty"
   ],
+  "buttons": {
+    "stronglyAgree": {
+      "text": "Strongly Agree",
+      "weight": 1
+    },
+    "agree": {
+      "text": "Agree",
+      "weight": 0.5
+    },
+    "neutral": {
+      "text": "Neutral",
+      "weight": 0
+    },
+    "disagree": {
+      "text": "Disagree",
+      "weight": -0.5
+    },
+    "stronglyDisagree": {
+      "text": "Strongly Disagree",
+      "weight": -1
+    }
+  },
+  "quizzes": {
+    "8vals": {
+      "name": "8 Values",
+      "url": "json/8val-questions.json"
+    },
+    "newvals": {
+      "name": "New Values",
+      "url": "json/newval-questions.json"
+    }
+  },
   "colors": {
     "econ": [
       "#860900",
@@ -73,11 +105,11 @@
     ],
     "scty": [
       "Revolutionary",
-      "Very Progressive",
       "Progressive",
+      "Reformist",
       "Neutral",
+      "Conservative",
       "Traditional",
-      "Very Traditional",
       "Reactionary"
     ]
   },

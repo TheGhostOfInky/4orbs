@@ -1,16 +1,5 @@
-export type param = {
-    axes: Array<string>;
-    colors: {
-        [key: string]: Array<string>;
-    };
-    labels: {
-        [key: string]: Array<string>;
-    };
-    images: {
-        [key: string]: Array<string>;
-    };
-}
-export function makeCanvas(canvas: HTMLCanvasElement, score: Object, params: param): void {
+import type { param, score } from "./types"
+export function makeCanvas(canvas: HTMLCanvasElement, scores: score, params: param): void {
     let ctx = <CanvasRenderingContext2D> canvas.getContext("2d")
     let H: number = 200 + 175*params.axes.length
     canvas.width = 850
@@ -26,11 +15,11 @@ export function makeCanvas(canvas: HTMLCanvasElement, score: Object, params: par
     ctx.fillText("theghostofinky.github.io/4orbs", 830, 60)
     ctx.fillText("proof of concept", 830, 90)
     for(let i: number = 0; i < params.axes.length; i++ ){
-        drawScore(ctx, score[params.axes[i]], params, params.axes[i],250+175*i)
+        drawScore(ctx, scores[params.axes[i]], params, params.axes[i],250+175*i)
     }
 }
 
-function drawScore(ctx: CanvasRenderingContext2D, score:number, params: param, axis:string, height:number): void {
+function drawScore(ctx: CanvasRenderingContext2D, score: number, params: param, axis:string, height:number): void {
     let fg: string = "#000"
     ctx.fillStyle = fg
     ctx.fillRect(125,height-2,600,4)
@@ -39,17 +28,16 @@ function drawScore(ctx: CanvasRenderingContext2D, score:number, params: param, a
         drawCircle(ctx,X,height,12,fg)
         drawCircle(ctx,X,height,8,params.colors[axis][i])
     }
-    if(score<=100 && score>=0){
-        let match: number = Math.round((score/100)*6.98 - 0.49)
-        let X: number = 125 + 100*match
+    if(score<=7 && score>=0){
+        let X: number = 125 + 100*score
         drawCircle(ctx,X,height,60,fg)
-        drawCircle(ctx,X,height,52,params.colors[axis][match])
+        drawCircle(ctx,X,height,52,params.colors[axis][score])
         ctx.textAlign = "center"
         ctx.font = "400 50px Dongle"
         ctx.fillStyle = fg
-        ctx.fillText(params.labels[axis][match],X,height-70)
+        ctx.fillText(params.labels[axis][score],X,height-70)
         let image = <HTMLImageElement> new Image()
-        image.src = "assets/" + params.images[axis][match]
+        image.src = "assets/" + params.images[axis][score]
         image.addEventListener(
             'load',
             () => ctx.drawImage(image,X-40,height-40,80,80), 
