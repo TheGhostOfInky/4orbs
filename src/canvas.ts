@@ -1,4 +1,5 @@
 import type { param, score } from "./types"
+//Draws the base of the canvas and orders the drawing of each axis
 export function makeCanvas(canvas: HTMLCanvasElement, scores: score, params: param): void {
     let ctx = <CanvasRenderingContext2D> canvas.getContext("2d")
     let H: number = 200 + 175*params.axes.length
@@ -18,7 +19,7 @@ export function makeCanvas(canvas: HTMLCanvasElement, scores: score, params: par
         drawScore(ctx, scores[params.axes[i]], params, params.axes[i],250+175*i)
     }
 }
-
+//Draws each axis 1 by 1 
 function drawScore(ctx: CanvasRenderingContext2D, score: number, params: param, axis:string, height:number): void {
     let fg: string = "#000"
     ctx.fillStyle = fg
@@ -46,6 +47,7 @@ function drawScore(ctx: CanvasRenderingContext2D, score: number, params: param, 
     }
 }
 
+//Draws a circle with the feeded parameters
 function drawCircle(ctx: CanvasRenderingContext2D, X:number, Y:number, radius:number, color:string): void {
     ctx.fillStyle = color
     ctx.beginPath()

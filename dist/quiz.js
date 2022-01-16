@@ -1,7 +1,7 @@
 let questions;
 let qn;
-let max = {};
-let userScore = {};
+let max;
+let userScore;
 let params;
 window.onload = () => select_quiz();
 async function select_quiz() {
@@ -23,6 +23,8 @@ async function select_quiz() {
 }
 async function parse_questions(url) {
     qn = 0;
+    max = {};
+    userScore = {};
     questions = await fetch(url)
         .then(response => response.json());
     let buttonholder = document.getElementById("button_holder");

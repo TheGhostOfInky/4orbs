@@ -3,7 +3,10 @@
             "outDir": "dist",
             "rootDir": "src",
             "sourceMap": true,
-            "module": "es2022",
-            "target": "ES2021"
+            "lib": ["DOM","es2021"],
+            "module": "ESNext",
+            "target": "ES2021",
+            "removeComments": true,
+            "strict": true
     }
 }

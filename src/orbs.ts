@@ -1,6 +1,7 @@
 import { makeCanvas } from "./canvas.js";
 import type { param, score } from "./types";
 
+//Grabs the scores from the URL, parses them and sends them to the canvas drawing routine
 window.onload = async (): Promise<void> => {
     const canvas = <HTMLCanvasElement> document.getElementById("orbcanvas")
     let params: param = await fetch("json/params.json")
@@ -9,7 +10,7 @@ window.onload = async (): Promise<void> => {
         let scores: score = JSON.parse(atob(window.location.search.substring(1)))
         makeCanvas(canvas,scores,params)
     }
-    catch(e) {
+    catch(e: any) {
         let ctx = <CanvasRenderingContext2D> canvas.getContext("2d")
         canvas.width = 400
         canvas.height = 400
