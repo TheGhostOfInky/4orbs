@@ -10,16 +10,16 @@ window.onload = () => select_quiz()
 
 //Displays the selection menu for picking each quiz
 async function select_quiz(): Promise<void> {
-    params = await fetch("json/params.json")
+    params = await fetch("json/params.json") //Fetches test paramters
         .then(response => response.json())
     document.getElementById("question-text")!.innerHTML = "Select a test to take:"
     document.getElementById("question-number")!.innerHTML = "Test selection"
-    let buttonholder = <HTMLDivElement> document.getElementById("button_holder")
-    while (buttonholder.firstChild) {
+    const buttonholder = <HTMLDivElement> document.getElementById("button_holder")
+    while (buttonholder.firstChild) { //Deletes all buttons
         buttonholder.removeChild(buttonholder.firstChild);
     }
-    for (const quiz in params.quizzes) {
-        let newbutton = <HTMLButtonElement> document.createElement("BUTTON")
+    for (const quiz in params.quizzes) { //Creates new buttons based on the available quizzes
+        const newbutton = <HTMLButtonElement> document.createElement("BUTTON")
         newbutton.innerHTML = params.quizzes[quiz].name
         newbutton.classList.add("button")
         newbutton.addEventListener("click",() => parse_questions(params.quizzes[quiz].url))
@@ -34,30 +34,30 @@ async function parse_questions(url:string): Promise<void> {
     userScore = {}
     questions = await fetch(url)
         .then(response => response.json())
-    let buttonholder = <HTMLDivElement> document.getElementById("button_holder")
-    while (buttonholder.firstChild) {
+    const buttonholder = <HTMLDivElement> document.getElementById("button_holder")
+    while (buttonholder.firstChild) { //Deletes all buttons
         buttonholder.removeChild(buttonholder.firstChild);
     }
-    for (const button in params.buttons) {
-        let newbutton = <HTMLButtonElement> document.createElement("BUTTON")
+    for (const button in params.buttons) { //Adds all question buttons
+        const newbutton = <HTMLButtonElement> document.createElement("BUTTON")
         newbutton.innerHTML = params.buttons[button].text
         newbutton.classList.add("button")
         newbutton.classList.add(button)
         newbutton.addEventListener("click",() => next_question(params.buttons[button].weight))
         buttonholder.appendChild(newbutton)
     }
-    let newbutton = <HTMLButtonElement> document.createElement("BUTTON")
+    let newbutton = <HTMLButtonElement> document.createElement("BUTTON") //Adds back button
     newbutton.innerHTML = "back"
     newbutton.classList.add("small_button")
     newbutton.addEventListener("click",() => prev_question())
     buttonholder.appendChild(newbutton)
-    for (const i in params.axes) {
+    for (const i in params.axes) { //Creates maximum score object and answer arrays 
         const axis: string = params.axes[i]
         userScore[axis] = new Array(questions.length)
         max[axis] = 0
     }
-    for (let i: number = 0; i < questions.length; i++) {
-        for(const n in params.axes){
+    for (let i: number = 0; i < questions.length; i++) { //Calculates maximum score
+        for(const n in params.axes){ 
             const axis: string = params.axes[n]
             max[axis] += Math.abs(questions[i].effect[axis])
         }
@@ -78,7 +78,7 @@ function next_question(mult: number):void {
         userScore[axis][qn] = mult*questions[qn].effect[axis]
     }
     qn++;
-    if (qn < questions.length) {
+    if (qn < questions.length) { //Re-initializes questions if questions are left, otherwise goes to results
         init_question();
     } else {
         results();
@@ -87,16 +87,16 @@ function next_question(mult: number):void {
 
 //Returns to the previous question
 function prev_question():void {
-    if (qn == 0) {
+    if (qn == 0) { //If first question returns to quiz selection menu
         select_quiz()
-    } else {
-    qn--;
-    init_question();
+    } else { //Otherwise rolls question number 1 back and re-initalizes questions
+        qn--;
+        init_question();
     }
 }
 
 //Calculates final scores and transfers them to the results page
-function results() {
+function results(): void {
     let finalScores: score = {}
     for(const i in params.axes){
         const axis: string = params.axes[i]
@@ -104,5 +104,5 @@ function results() {
         const ratio: number = (max[axis]+total)/(2*max[axis])
         finalScores[axis] = Math.round(ratio*6.98 - 0.49)
     }
-    location.href = "results.html?" + btoa(JSON.stringify(finalScores))
+    location.href = "results.html?" + btoa(JSON.stringify(finalScores)) //Jumps to location of results page + base64 encoded json with answers
 }

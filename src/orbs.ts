@@ -4,14 +4,14 @@ import type { param, score } from "./types";
 //Grabs the scores from the URL, parses them and sends them to the canvas drawing routine
 window.onload = async (): Promise<void> => {
     const canvas = <HTMLCanvasElement> document.getElementById("orbcanvas")
-    let params: param = await fetch("json/params.json")
+    const params: param = await fetch("json/params.json")
         .then(response => response.json())
-    try {
-        let scores: score = JSON.parse(atob(window.location.search.substring(1)))
+    try { //Tries to parse the score and draw a canvas
+        const scores: score = JSON.parse(atob(window.location.search.substring(1)))
         makeCanvas(canvas,scores,params)
     }
-    catch(e: any) {
-        let ctx = <CanvasRenderingContext2D> canvas.getContext("2d")
+    catch(e: any) { //Displays an error on the canvas in the case of failure
+        const ctx = <CanvasRenderingContext2D> canvas.getContext("2d")
         canvas.width = 400
         canvas.height = 400
         ctx.fillStyle = "#DDD"
@@ -19,8 +19,8 @@ window.onload = async (): Promise<void> => {
         ctx.textAlign = "left"
         ctx.font = "400 50px Dongle"
         ctx.fillStyle = "#000"
-        let error:string = e.toString()
-        let x: number = 23
+        const error:string = e.toString()
+        const x: number = 23
         for (let i:number= 0;i*x<error.length;i++){
             ctx.fillText(error.substring(i*x,(i+1)*x),30,50+i*30)
         }

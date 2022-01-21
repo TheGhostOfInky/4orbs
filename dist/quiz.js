@@ -9,12 +9,12 @@ async function select_quiz() {
         .then(response => response.json());
     document.getElementById("question-text").innerHTML = "Select a test to take:";
     document.getElementById("question-number").innerHTML = "Test selection";
-    let buttonholder = document.getElementById("button_holder");
+    const buttonholder = document.getElementById("button_holder");
     while (buttonholder.firstChild) {
         buttonholder.removeChild(buttonholder.firstChild);
     }
     for (const quiz in params.quizzes) {
-        let newbutton = document.createElement("BUTTON");
+        const newbutton = document.createElement("BUTTON");
         newbutton.innerHTML = params.quizzes[quiz].name;
         newbutton.classList.add("button");
         newbutton.addEventListener("click", () => parse_questions(params.quizzes[quiz].url));
@@ -27,12 +27,12 @@ async function parse_questions(url) {
     userScore = {};
     questions = await fetch(url)
         .then(response => response.json());
-    let buttonholder = document.getElementById("button_holder");
+    const buttonholder = document.getElementById("button_holder");
     while (buttonholder.firstChild) {
         buttonholder.removeChild(buttonholder.firstChild);
     }
     for (const button in params.buttons) {
-        let newbutton = document.createElement("BUTTON");
+        const newbutton = document.createElement("BUTTON");
         newbutton.innerHTML = params.buttons[button].text;
         newbutton.classList.add("button");
         newbutton.classList.add(button);

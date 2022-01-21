@@ -1,6 +1,6 @@
 export function makeCanvas(canvas, scores, params) {
-    let ctx = canvas.getContext("2d");
-    let H = 200 + 175 * params.axes.length;
+    const ctx = canvas.getContext("2d");
+    const H = 200 + 175 * params.axes.length;
     canvas.width = 850;
     canvas.height = H;
     ctx.fillStyle = "#DDD";
@@ -18,25 +18,31 @@ export function makeCanvas(canvas, scores, params) {
     }
 }
 function drawScore(ctx, score, params, axis, height) {
-    let fg = "#000";
+    const fg = "#000";
     ctx.fillStyle = fg;
     ctx.fillRect(125, height - 2, 600, 4);
     for (let i = 0; i < 7; i++) {
-        let X = 125 + 100 * i;
+        const X = 125 + 100 * i;
         drawCircle(ctx, X, height, 12, fg);
         drawCircle(ctx, X, height, 8, params.colors[axis][i]);
     }
-    if (score <= 6 && score >= 0) {
-        let X = 125 + 100 * score;
+    if (score <= 6 && score >= 0 && Number.isInteger(score)) {
+        const X = 125 + 100 * score;
         drawCircle(ctx, X, height, 60, fg);
         drawCircle(ctx, X, height, 52, params.colors[axis][score]);
         ctx.textAlign = "center";
         ctx.font = "400 50px Dongle";
         ctx.fillStyle = fg;
         ctx.fillText(params.labels[axis][score], X, height - 70);
-        let image = new Image();
+        const image = new Image();
         image.src = "assets/" + params.images[axis][score];
         image.addEventListener('load', () => ctx.drawImage(image, X - 40, height - 40, 80, 80), false);
+    }
+    else {
+        ctx.textAlign = "center";
+        ctx.font = "400 50px Dongle";
+        ctx.fillStyle = fg;
+        ctx.fillText("Invalid value", 425, height - 30);
     }
 }
 function drawCircle(ctx, X, Y, radius, color) {
