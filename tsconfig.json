@@ -1,12 +1,20 @@
 {
     "compilerOptions": {
-            "outDir": "dist",
-            "rootDir": "src",
-            "sourceMap": true,
-            "lib": ["DOM","es2021"],
-            "module": "ESNext",
-            "target": "ES2021",
-            "removeComments": true,
-            "strict": true
-    }
+        "outDir": "dist",
+        "rootDir": "src/ts",
+        "sourceMap": true,
+        "lib": [
+            "DOM",
+            "es2022"
+        ],
+        "module": "ES2022",
+        "target": "ES2022",
+        "removeComments": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "strict": true
+    },
+    "exclude": [
+        "scripts"
+    ]
 }

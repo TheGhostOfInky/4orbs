@@ -1,0 +1,24 @@
+doctype html
+html(lang="en-US")
+    include includes/head 
+    body
+        a(
+            href="https://github.com/TheGhostOfInky/4Orbs"
+            class="github-corner"
+            aria-label="View source on Github"
+            )
+            include includes/github.svg
+        h1 4Orbs
+        canvas(id="demo-canvas")
+        button(onclick="location.href = 'instructions.html'") Start
+        h2 What is 4Orbs?
+        p 4Orbs is a proof of concept of a new way to display the scores from 8values-style quizzes.
+        p This version features questions from both 8values and NewValues.
+        p Feel free to clone the source code on github and create your own version for different quizzes that use the same format.
+        h2 What if I don't like my results?
+        p All the questions in this test were made by the authors of 8values and NewValues, I suggest you forward any complaints to them.
+        if inlineJs 
+            script(type="module") !{js["index"]}
+        else 
+            script(type="module" src="./dist/index.js")
+        

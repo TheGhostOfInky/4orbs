@@ -1,0 +1,15 @@
+doctype html
+html(lang="en-US")
+    include includes/head 
+    body 
+        h1 4Orbs
+        hr
+        h1 Results
+        canvas(id="orb-canvas")
+        button(id="download-button") Download your results
+        button(onclick="location.href = 'custom.html'") Make your custom score.
+        button(onclick="location.href = 'index.html'") Return to the start.
+        if inlineJs
+            script(type="module") !{js["results"]}
+        else 
+            script(type="module" src="./dist/results.js")

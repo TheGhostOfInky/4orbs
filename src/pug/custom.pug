@@ -1,0 +1,13 @@
+doctype html
+html(lang="en-US")
+    include includes/head 
+    body 
+        h1 4Orbs
+        hr
+        h1 Custom
+        canvas(id="custom-canvas")
+        button(id="download-button") Download
+        if inlineJs
+            script(type="module") !{js["custom"]}
+        else 
+            script(type="module" src="./dist/custom.js")

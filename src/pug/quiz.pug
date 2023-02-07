@@ -1,0 +1,13 @@
+doctype html
+html(lang="en-US")
+    include includes/head 
+    body 
+        h1 4Orbs
+        hr
+        h2(id="question-number") Loading... 
+        p(id="question-text")
+        div(id="button-holder")
+        if inlineJs 
+            script(type="module") !{js["quiz"]}
+        else 
+            script(type="module" src="./dist/quiz.js")

@@ -1,36 +1,75 @@
-@import url('https://fonts.googleapis.com/css2?family=Dongle:wght@400;700&display=swap');
+@font-face {
+    font-family: Dongle;
+    src: url(./assets/fonts/Dongle-Regular.ttf);
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: Dongle;
+    src: url(./assets/fonts/Dongle-Bold.ttf);
+    font-weight: bold;
+}
+
+:root {
+    --html-bg: #bbb;
+    --body-bg: #ddd;
+    --body-border: #eee;
+    --text: #444;
+    --bolder-text: #333;
+    --boldest-text: #222;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --html-bg: #555;
+        --body-bg: #222;
+        --body-border: #333;
+        --text: #ddd;
+        --bolder-text: #eeee;
+        --boldest-text: #fff;
+    }
+}
+
 html {
-    background-color: #bbbbbb;
+    background-color: var(--html-bg);
     padding: 0px;
     scroll-behavior: smooth;
 }
+
 body {
     width: 80%;
     min-height: calc(100vh - 4em);
     margin: 0 auto;
     padding: 2em;
-    background-color: #dddddd;
-    border-color: #eeeeee;
+    background-color: var(--body-bg);
+    border-color: var(--body-border);
     border-left-style: solid;
     border-right-style: solid;
     border-width: 20px;
 }
+
 p {
-    color: #444444;
+    color: var(--text);
     font-family: 'Dongle', sans-serif;
-    font-size: 18.5pt;
+    max-width: 800px;
+    font-size: 28pt;
     line-height: 1.15;
-    margin: 4pt;
+    margin: 4pt auto;
+    text-align: center;
 }
-p.question {
+
+p.question,
+#question-text,
+#instructions-text {
     margin: 16pt auto;
-    color: #333333;
+    color: var(--bolder-text);
     font-family: 'Dongle', sans-serif;
     font-weight: normal;
     width: 70%;
     min-width: 500pt;
-    min-height: 144pt;
-    background-color: #eeeeee;
+    line-height: 0.8em;
+    min-height: 150pt;
+    background-color: var(--body-border);
     padding: 16pt;
     border-radius: 16pt;
     font-size: 48pt;
@@ -38,10 +77,10 @@ p.question {
     justify-content: center;
     align-items: center;
     text-align: center;
-
 }
+
 h1 {
-    color: #222222;
+    color: var(--boldest-text);
     font-family: 'Dongle', sans-serif;
     font-size: 96pt;
     text-align: center;
@@ -49,22 +88,27 @@ h1 {
     margin-top: 0pt;
     margin-bottom: 0pt;
 }
+
 h2 {
-    color: #333333;
+    text-align: center;
+    color: var(--bolder-text);
     font-family: 'Dongle', sans-serif;
     font-size: 52pt;
     line-height: 52pt;
     margin-top: 12pt;
     margin-bottom: 10pt;
 }
+
 li {
     font-size: 24pt;
     text-indent: 24pt;
 }
+
 a {
     font-family: inherit;
 }
-.button {
+
+button {
     display: block;
     background-color: #2196f3;
     font-family: 'Dongle', sans-serif;
@@ -73,25 +117,62 @@ a {
     color: white;
     padding: 0pt;
     width: 50%;
-    min-width: 500pt;
     text-align: center;
     text-decoration: none;
-    display: block;
     font-size: 32pt;
     margin: 10px auto;
     cursor: pointer;
 }
-.button:hover, .button:focus { background: #1687e0; }
-.stronglyAgree { background: #1b5e20; }
-.stronglyAgree:hover, .stronglyAgree:focus { background: #154a19; }
-.agree { background: #4caf50; }
-.agree:hover, .agree:focus { background: #29942e; }
-.neutral { background: #949494; }
-.neutral:hover, .neutral:focus { background: #656565; }
-.disagree { background: #f44336; }
-.disagree:hover, .disagree:focus { background: #d6271a; }
-.stronglyDisagree { background: #b71c1c; }
-.stronglyDisagree:hover, .stronglyDisagree:focus { background: #a00e0e; }
+
+button:hover,
+button:focus {
+    background: #1687e0;
+}
+
+.stronglyAgree {
+    background: #1b5e20;
+}
+
+.stronglyAgree:hover,
+.stronglyAgree:focus {
+    background: #154a19;
+}
+
+.agree {
+    background: #4caf50;
+}
+
+.agree:hover,
+.agree:focus {
+    background: #29942e;
+}
+
+.neutral {
+    background: #949494;
+}
+
+.neutral:hover,
+.neutral:focus {
+    background: #656565;
+}
+
+.disagree {
+    background: #f44336;
+}
+
+.disagree:hover,
+.disagree:focus {
+    background: #d6271a;
+}
+
+.stronglyDisagree {
+    background: #b71c1c;
+}
+
+.stronglyDisagree:hover,
+.stronglyDisagree:focus {
+    background: #a00e0e;
+}
 
 .small_button {
     background-color: #333;
@@ -110,8 +191,8 @@ a {
     cursor: pointer;
 }
 
-#orbcanvas {
-    border-color: #444444;
+canvas {
+    border-color: var(--text);
     border-style: solid;
     border-width: 2px;
     border-radius: 8pt;
@@ -122,43 +203,133 @@ a {
     max-width: 100%;
 }
 
+#custom-canvas {
+    cursor: pointer;
+}
+
+#demo-canvas {
+    max-width: 400px;
+}
+
 #hidden {
     font-size: 1%;
-    color:#dddddd;
+    color: #dddddd;
 }
 
 #disclaimer {
     text-align: center;
 }
-@media (prefers-color-scheme: dark) {
+
+@media screen and (max-width: 1000px) {
     html {
-        background-color: #555;
+        height: 100%;
+        background-color: var(--body-bg);
     }
+
     body {
-        background-color: #222;
-        border-color: #333;
+        width: 100%;
+        height: 100%;
+        margin: 0px;
+        border: 0px;
+        padding: 0px;
+        overflow-x: hidden;
     }
-    p {
-        color: #FFF;
+
+    button {
+        width: 80vw;
+        font-size: 8vw;
     }
-    p.question {
-        color: #FFF;
-        background-color: #333;   
-    }
+
     h1 {
-        color: #FFF;
+        padding-top: 1vw;
+        font-size: 18vw;
+        line-height: 1em;
     }
+
     h2 {
-        color: #FFF;
+        margin-top: 0px;
+        margin-bottom: 0.2vw;
+        font-size: 14vw;
+        line-height: 1em;
     }
+
+    #question-number {
+        font-size: 10vw;
+        line-height: 0.6em;
+    }
+
+    hr {
+        display: none;
+    }
+
+    #instructions-text,
+    #question-text {
+        flex: 1;
+        min-width: unset;
+        max-width: unset;
+        width: 70vw;
+        font-size: 10vw;
+        line-height: 0.6em;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        row-gap: 0px;
+        height: auto;
+        padding-top: 1vw;
+        padding-bottom: 0.5vw;
+        min-height: 4.2em;
+    }
+
+    #demo-canvas {
+        width: 70vw;
+    }
+
+    #orb-canvas,
+    #custom-canvas {
+        width: 90vw;
+    }
+
     .small_button {
-        background-color: #888;
-        color: white;
+        width: 40vw;
+        height: 13vw;
     }
-    #orbcanvas {
-        border-color: #000;
+
+    .github-corner:hover .octo-arm {
+        animation: none;
     }
-    #hidden {
-        color: #222;
+
+    .github-corner .octo-arm {
+        animation: octocat-wave 560ms ease-in-out;
+    }
+}
+
+/*Github corner CSS*/
+.github-corner svg {
+    fill: var(--boldest-text);
+}
+
+.github-corner svg .octo-arm,
+.github-corner svg .octo-body {
+    fill: var(--body-border);
+}
+
+.github-corner:hover .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+}
+
+@keyframes octocat-wave {
+
+    0%,
+    100% {
+        transform: rotate(0);
+    }
+
+    20%,
+    60% {
+        transform: rotate(-25deg);
+    }
+
+    40%,
+    80% {
+        transform: rotate(10deg);
     }
 }
