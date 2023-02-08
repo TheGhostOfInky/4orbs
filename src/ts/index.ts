@@ -6,11 +6,12 @@ class BlankableCanvas extends Orbs {
     constructor(elm: HTMLCanvasElement, params: QuizParams) {
         super(elm, params);
         this.hpars = {
-            title: "4Orbs",
+            title: document.title,
             url: cleanUrl(window.location, "index"),
             version: this.quizParams.version,
             edition: "demo"
         }
+        this.drawAll(this.hpars, this.genRandom());
     }
 
     blankFull(): void {
@@ -19,13 +20,12 @@ class BlankableCanvas extends Orbs {
     }
 
     genRandom(): NumObj {
-        const rnd06 = () => Math.floor(Math.random() * 7);
+        const rnd06 = (): number => Math.floor(Math.random() * 7);
         const scores: NumObj = {};
         for (const axis of this.quizParams.axes) {
             scores[axis] = rnd06();
         }
         return scores;
-
     }
 
     drawRandom(): void {
@@ -47,7 +47,5 @@ const [pars, _] = await Promise.all(
 const canvasElm = <HTMLCanvasElement>document.getElementById("demo-canvas")!;
 
 const orbs = new BlankableCanvas(canvasElm, await pars.json());
-
-orbs.drawRandom();
 
 const interval = setInterval(() => orbs.drawRandom(), 2500);

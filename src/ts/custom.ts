@@ -21,6 +21,7 @@ class TouchOrbs extends Orbs {
             edition: "Custom"
         };
         this.drawAll(this.hPars, this.state);
+        this.preload();
     }
     private blank(index: number): void {
         const height = 150 + (175 * index);
@@ -31,6 +32,14 @@ class TouchOrbs extends Orbs {
         this.ctx.fillStyle = this.params.bg;
         this.ctx.fillRect(0, 0, this.params.width, 150);
     }
+    async preload(): Promise<void> {
+        for(const axis of Object.values(this.quizParams.images)) {
+            for(const img of axis) {
+                const elm = new Image();
+                elm.src = `./assets/icons/${img}`;
+            }
+        }
+    }
 
     touchEvent(event: MouseEvent, canvas: HTMLCanvasElement): void {
         const bounds = canvas.getBoundingClientRect();
@@ -38,11 +47,10 @@ class TouchOrbs extends Orbs {
             (event.clientX - bounds.left) * (this.quizParams.canvasParams.width / bounds.width),
             (event.clientY - bounds.top) * (this.quizParams.canvasParams.height / bounds.height)
         ];
-        console.log(event, bounds, x, y);
         if (y > 175 && x > 50 && x < (this.params.width - 40)) {
             const height = (y - 175) % 175;
             if (height > 150)
-                return
+                return;
             const tier = Math.floor((y - 175) / 175);
             const range = this.params.width - 100;
             const level = Math.floor(((x - 50) / range) * 7);

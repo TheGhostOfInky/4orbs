@@ -105,7 +105,7 @@ export class Orbs {
 export function cleanUrl(loc: Location, pageName: string | null = null): string {
     let baseLoc = loc.search ? loc.href.split(loc.search)[0] : loc.href;
     baseLoc = baseLoc.replace(/^https?\:\/\//gmi, "");
-    baseLoc = baseLoc.replace(/\/$/gmi,"");
+    baseLoc = baseLoc.replace(/\/$/gmi, "");
     const page = new RegExp(`\/${pageName}(.htm[l]?)?$`, "gmi")
     if (baseLoc.match(page)) {
         baseLoc = baseLoc.replace(page, "");

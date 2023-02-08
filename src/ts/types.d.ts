@@ -66,5 +66,5 @@ declare global {
     interface globalThis {
         VERSION: string;
     }
-} 
+}
 
