@@ -5,8 +5,8 @@
     "width": 850,
     "bg": "#DDD",
     "fg": "#000",
-    "titleFont": "700 120px Dongle",
-    "bodyFont": "400 50px Dongle"
+    "titleFont": "700 120px Dongle, sans-serif",
+    "bodyFont": "400 50px Dongle, sans-serif"
   },
   "axes": [
     "econ",

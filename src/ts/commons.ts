@@ -84,14 +84,16 @@ export class Orbs {
             return new Promise<void>(r => r());
     }
 
-    drawAll(hParams: HeaderParams, scores: NumObj): void {
+    drawAll(hParams: HeaderParams, scores: NumObj): Promise<void[]> {
         this.drawHeader(hParams);
+        const promises = [];
         for (const [k, v] of Object.entries(scores)) {
             if (this.checkValue(v))
-                this.drawAxis(k, v);
+                promises.push(this.drawAxis(k, v));
             else
                 throw new Error(`Invalid score: ${k}: ${v}`);
         }
+        return Promise.all(promises);
     }
     static downloadCanvas(canvas: HTMLCanvasElement): void {
         const link = document.createElement("a");

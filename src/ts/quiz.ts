@@ -1,6 +1,6 @@
 import type { QuizParams, Question, NumObj, ScoreList, ScoreObj, QuizObj } from "./types";
 import { b64enc } from "./commons.js"
-let questions: Array<Question>
+let questions: Question[]
 let qn: number
 let max: NumObj
 let userScore: ScoreList

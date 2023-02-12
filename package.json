@@ -1,6 +1,6 @@
 {
   "name": "4Orbs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "dependencies": {
     "@types/node": "^18.13.0",
     "@types/pug": "^2.0.6",

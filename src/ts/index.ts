@@ -11,7 +11,6 @@ class BlankableCanvas extends Orbs {
             version: this.quizParams.version,
             edition: "demo"
         }
-        this.drawAll(this.hpars, this.genRandom());
     }
 
     blankFull(): void {
@@ -28,9 +27,9 @@ class BlankableCanvas extends Orbs {
         return scores;
     }
 
-    drawRandom(): void {
+    drawRandom(): Promise<void[]> {
         this.blankFull();
-        this.drawAll(this.hpars, this.genRandom());
+        return this.drawAll(this.hpars, this.genRandom());
     }
 }
 
@@ -44,8 +43,25 @@ const [pars, _] = await Promise.all(
     [fetch("./dist/json/params.json"), windowLoaded]
 );
 
-const canvasElm = <HTMLCanvasElement>document.getElementById("demo-canvas")!;
+const canvasImg = <HTMLImageElement>document.getElementById("demo-canvas1")!;
+const canvasImgBg = <HTMLImageElement>document.getElementById("demo-canvas2")!;
+const canvasElm = document.createElement("canvas");
 
 const orbs = new BlankableCanvas(canvasElm, await pars.json());
 
-const interval = setInterval(() => orbs.drawRandom(), 2500);
+async function drawCanvas() {
+    canvasImgBg.src = canvasElm.toDataURL("image/png");
+    canvasImg.classList.add("transparent")
+    await Promise.all(
+        [orbs.drawRandom(),
+        new Promise(r => setTimeout(r, 1250))]
+    );
+    canvasImg.src = canvasElm.toDataURL("image/png");
+    canvasImg.classList.remove("transparent");
+}
+
+await orbs.drawRandom();
+drawCanvas();
+
+const interval = setInterval(drawCanvas, 2500);
+
