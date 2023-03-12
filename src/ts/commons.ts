@@ -39,36 +39,47 @@ export class Orbs {
         return (Number.isInteger(val) && val > -1 && val < 7);
     }
 
-    protected async drawImage(url: string, x: number, y: number): Promise<void> {
+    protected loadImage(url: string): Promise<HTMLImageElement> {
         const image = new Image();
         image.src = "./assets/icons/" + url;
-        return new Promise<void>((resolve, reject) => {
-            image.addEventListener("load", () => {
-                this.ctx.drawImage(image, x - 40, y - 40, 80, 80);
-                resolve();
-            });
-            image.addEventListener("abort", error => {
-                reject(error);
-            });
+        return new Promise<HTMLImageElement>((resolve, reject) => {
+            image.addEventListener("load", () => resolve(image));
+            image.addEventListener("abort", reject);
         });
     }
 
-    drawAxis(axis: string, score: number): Promise<void> {
+    protected drawImage(image: HTMLImageElement, x: number, y: number): void {
+        this.ctx.drawImage(image, x - 40, y - 40, 80, 80);
+    }
+
+    protected getImage(axis: string, score: number): string | null {
+        if (!this.checkValue(score)) {
+            return null;
+        }
+        return this.quizParams.images[axis][score]
+    }
+
+    private getRangeSteps(range: number): number[] {
+        return Array(7).fill(0).map(
+            (_, i) => 125 + (range / 6) * i
+        );
+    }
+
+    protected fillAxis(axis: string, score: number, image: HTMLImageElement | null): void {
         const index = this.quizParams.axes.indexOf(axis);
         const height = 250 + 175 * index;
         const range = this.params.width - 250;
+
         this.ctx.fillStyle = this.params.fg;
         this.ctx.fillRect(125, height, range, 4);
+        const rangeSteps = this.getRangeSteps(range);
 
-        const rangeSteps = new Array(7).fill(0).map(
-            (_, i) => 125 + (range / 6) * i
-        );
         for (const [ind, dot] of rangeSteps.entries()) {
             this.drawCircle(dot, height, 12);
             const color = this.quizParams.colors[axis][ind];
             this.drawCircle(dot, height, 8, color);
         }
-        if (this.checkValue(score)) {
+        if (image) {
             const bigX = rangeSteps[score];
             const color = this.quizParams.colors[axis][score];
             const ideo = this.quizParams.labels[axis][score];
@@ -78,10 +89,14 @@ export class Orbs {
             this.ctx.fillText(ideo, bigX, height - 70, 225)
             this.drawCircle(bigX, height, 60);
             this.drawCircle(bigX, height, 52, color);
-            const img = this.quizParams.images[axis][score];
-            return this.drawImage(img, bigX, height);
-        } else
-            return new Promise<void>(r => r());
+            this.drawImage(image, bigX, height);
+        }
+    }
+
+    async drawAxis(axis: string, score: number): Promise<void> {
+        const imgSrc = this.getImage(axis, score);
+        const image = imgSrc ? await this.loadImage(imgSrc) : null;
+        this.fillAxis(axis, score, image);
     }
 
     drawAll(hParams: HeaderParams, scores: NumObj): Promise<void[]> {

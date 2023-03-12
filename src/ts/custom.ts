@@ -41,7 +41,7 @@ class TouchOrbs extends Orbs {
         }
     }
 
-    touchEvent(event: MouseEvent, canvas: HTMLCanvasElement): void {
+    async touchEvent(event: MouseEvent, canvas: HTMLCanvasElement): Promise<void> {
         const bounds = canvas.getBoundingClientRect();
         const [x, y] = [
             (event.clientX - bounds.left) * (this.quizParams.canvasParams.width / bounds.width),
@@ -51,13 +51,18 @@ class TouchOrbs extends Orbs {
             const height = (y - 175) % 175;
             if (height > 150)
                 return;
+            
             const tier = Math.floor((y - 175) / 175);
             const range = this.params.width - 100;
             const level = Math.floor(((x - 50) / range) * 7);
             const key = this.quizParams.axes[tier];
             this.state[key] = level;
+            
+            const imgSrc = this.getImage(key, level);
+            const image = imgSrc ? await this.loadImage(imgSrc): null;
             this.blank(tier);
-            this.drawAxis(key, level);
+            this.fillAxis(key, level, image);
+
         } else if (y < 110 && y > 40 && x < (this.params.width - 180) && x > 40) {
             const name = window.prompt("Enter the desired name: ")?.trim();
             if (name) {
