@@ -12,8 +12,10 @@ html(lang="en-US")
         div(id="demo-holder")  
             img(id="demo-canvas2")
             img(id="demo-canvas1")
-        button(onclick="location.href = 'instructions.html'") Start the test
-        button(onclick="location.href = 'custom.html'") Create your own custom results
+        a(href="instructions.html")
+            button Start the test
+        a(href="custom.html")
+            button Create your own custom results
         h2 What is 4Orbs?
         p 4Orbs is a proof of concept of a new way to display the scores from 8values-style quizzes.
         p This version features questions from both 8values and NewValues.
@@ -24,4 +26,3 @@ html(lang="en-US")
             script(type="module") !{js["index"]}
         else 
             script(type="module" src="./dist/index.js")
-        

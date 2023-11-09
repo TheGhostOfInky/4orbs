@@ -7,8 +7,10 @@ html(lang="en-US")
         h1 Results
         canvas(id="orb-canvas")
         button(id="download-button") Download your results
-        button(onclick="location.href = 'custom.html'") Make your custom score
-        button(onclick="location.href = 'index.html'") Return to the start
+        a(href="custom.html")
+            button Make your custom score
+        a(href="index.html")
+            button Return to the start
         if inlineJs
             script(type="module") !{js["results"]}
         else 
