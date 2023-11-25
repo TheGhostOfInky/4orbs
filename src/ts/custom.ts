@@ -33,8 +33,8 @@ class TouchOrbs extends Orbs {
         this.ctx.fillRect(0, 0, this.params.width, 150);
     }
     async preload(): Promise<void> {
-        for(const axis of Object.values(this.quizParams.images)) {
-            for(const img of axis) {
+        for (const axis of Object.values(this.quizParams.images)) {
+            for (const img of axis) {
                 const elm = new Image();
                 elm.src = `./assets/icons/${img}`;
             }
@@ -51,15 +51,19 @@ class TouchOrbs extends Orbs {
             const height = (y - 175) % 175;
             if (height > 150)
                 return;
-            
+
             const tier = Math.floor((y - 175) / 175);
             const range = this.params.width - 100;
             const level = Math.floor(((x - 50) / range) * 7);
+            if (level > 6 || level < 0) {
+                return;
+            }
+
             const key = this.quizParams.axes[tier];
             this.state[key] = level;
-            
+
             const imgSrc = this.getImage(key, level);
-            const image = imgSrc ? await this.loadImage(imgSrc): null;
+            const image = imgSrc ? await this.loadImage(imgSrc) : null;
             this.blank(tier);
             this.fillAxis(key, level, image);
 
