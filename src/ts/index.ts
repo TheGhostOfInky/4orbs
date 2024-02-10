@@ -1,5 +1,5 @@
-import type { QuizParams, HeaderParams, NumObj } from "./types";
-import { Orbs, cleanUrl } from "./commons.js";
+import type { QuizParams, HeaderParams } from "./types";
+import { Orbs, cleanUrl, loadJson } from "./commons.js";
 
 class BlankableCanvas extends Orbs {
     hpars: HeaderParams;
@@ -18,9 +18,9 @@ class BlankableCanvas extends Orbs {
         this.ctx.fillRect(0, 0, this.params.width, this.params.height);
     }
 
-    genRandom(): NumObj {
+    genRandom(): Record<string, number> {
         const rnd06 = (): number => Math.floor(Math.random() * 7);
-        const scores: NumObj = {};
+        const scores = {} as Record<string, number>;
         for (const axis of this.quizParams.axes) {
             scores[axis] = rnd06();
         }
@@ -40,14 +40,14 @@ const windowLoaded = new Promise<void>(resolve => {
 });
 
 const [pars, _] = await Promise.all(
-    [fetch("./dist/json/params.json"), windowLoaded]
+    [loadJson<QuizParams>("params"), windowLoaded]
 );
 
 const canvasImg = <HTMLImageElement>document.getElementById("demo-canvas1")!;
 const canvasImgBg = <HTMLImageElement>document.getElementById("demo-canvas2")!;
 const canvasElm = document.createElement("canvas");
 
-const orbs = new BlankableCanvas(canvasElm, await pars.json());
+const orbs = new BlankableCanvas(canvasElm, pars);
 
 async function drawCanvas() {
     canvasImgBg.src = canvasElm.toDataURL("image/png");

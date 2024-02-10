@@ -1,14 +1,6 @@
-export type NumObj = {
-    [key: string]: number;
-};
-
-export type StrObj = {
-    [key: string]: string;
-};
-
 export type ScoreObj = {
     quiz: string;
-    scores: NumObj;
+    scores: Record<string, number>;
 }
 
 type QuizObj = {
@@ -16,36 +8,30 @@ type QuizObj = {
     url: string;
 }
 
+export type QuizButton = {
+    text: string;
+    weight: number;
+};
+
 export type QuizParams = {
     axes: string[];
     version: string;
     canvasParams: CanvasParams;
-    buttons: {
-        [key: string]: {
-            text: string;
-            weight: number;
-        }
-    };
-    quizzes: {
-        [key: string]: QuizObj;
-    };
-    colors: StrObj;
-    labels: StrObj;
-    images: StrObj;
+    buttons: Record<string, QuizButton>;
+    quizzes: Record<string, QuizObj>;
+    colors: Record<string, string>;
+    labels: Record<string, string>;
+    images: Record<string, string>;
 }
 
 export type Question = {
     question: string;
-    effect: {
-        [key: string]: number;
-    }
+    effect: Record<string, number>;
 }
 
-export type ScoreList = {
-    [key: string]: number[];
-}
+//DEPRECATED
+export type ScoreList = Record<string, number[]>;
 
-//new
 export type CanvasParams = {
     height: number;
     width: number;
@@ -60,11 +46,5 @@ export type HeaderParams = {
     url: string;
     version: string;
     edition: string;
-}
-
-declare global {
-    interface globalThis {
-        VERSION: string;
-    }
 }
 

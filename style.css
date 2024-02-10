@@ -175,7 +175,7 @@ button:focus {
     background: #a00e0e;
 }
 
-.small_button {
+.small-button {
     background-color: #333;
     font-family: 'Dongle', sans-serif;
     border: none;

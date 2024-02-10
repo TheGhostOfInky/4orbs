@@ -39,11 +39,11 @@
   "quizzes": {
     "8vals": {
       "name": "8values",
-      "url": "./dist/json/8val-questions.json"
+      "url": "8val-questions"
     },
     "newvals": {
       "name": "NewValues",
-      "url": "./dist/json/newval-questions.json"
+      "url": "newval-questions"
     }
   },
   "colors": {

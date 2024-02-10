@@ -1,5 +1,5 @@
-import { Orbs, b64dec, cleanUrl } from "./commons.js"
-import type { QuizParams, HeaderParams, ScoreObj } from "./types"
+import { Orbs, cleanUrl, scoreParser, loadJson } from "./commons.js"
+import type { QuizParams, HeaderParams } from "./types"
 
 const windowLoaded = new Promise<void>(resolve => {
     window.addEventListener("load", () => {
@@ -8,27 +8,24 @@ const windowLoaded = new Promise<void>(resolve => {
 });
 
 const [pars, _] = await Promise.all(
-    [fetch("./dist/json/params.json"), windowLoaded]
+    [loadJson<QuizParams>("params"), windowLoaded]
 );
 
 const orbsCanvas = <HTMLCanvasElement>document.getElementById("orb-canvas")!
 
-const quizParams: QuizParams = await pars.json();
+const orbs = new Orbs(orbsCanvas, pars);
 
-const orbs = new Orbs(orbsCanvas, quizParams);
-
-const urlSearch = b64dec(window.location.search.substring(1));
-
-const scores: ScoreObj = JSON.parse(urlSearch);
+const [quiz, rawScores] = scoreParser.decode(window.location.search.substring(1));
+const scores = Object.fromEntries(pars.axes.map((x, i) => [x, rawScores[i]])) as Record<string, number>;
 
 const params: HeaderParams = {
     title: document.title,
     url: cleanUrl(window.location, "results"),
-    version: quizParams.version,
-    edition: scores.quiz
+    version: pars.version,
+    edition: quiz
 };
 
-orbs.drawAll(params, scores.scores);
+orbs.drawAll(params, scores);
 
 document.getElementById("download-button")!.onclick = () => {
     Orbs.downloadCanvas(orbsCanvas);

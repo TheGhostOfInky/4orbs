@@ -1,108 +1,132 @@
-import type { QuizParams, Question, NumObj, ScoreList, ScoreObj, QuizObj } from "./types";
-import { b64enc } from "./commons.js"
-let questions: Question[]
-let qn: number
-let max: NumObj
-let userScore: ScoreList
-let params: QuizParams
-let quizName: string
+import type { QuizParams, Question, QuizObj, QuizButton } from "./types";
+import { loadJson, scoreParser, randomizeArray } from "./commons.js";
 
-//Once the browser window has loaded, runs the selection menu
-window.onload = select_quiz;
+const quizText = <HTMLParagraphElement>document.getElementById("question-text")!;
+const quizNumber = <HTMLHeadingElement>document.getElementById("question-number")!;
+const buttonholder = <HTMLDivElement>document.getElementById("button-holder")!;
 
-//Displays the selection menu for picking each quiz
-async function select_quiz(): Promise<void> {
-    params = await (await fetch("./dist/json/params.json")).json(); //Fetches test paramters
-    document.getElementById("question-text")!.innerHTML = "Select a test to take:";
-    document.getElementById("question-number")!.innerHTML = "Test selection";
-    const buttonholder = <HTMLDivElement>document.getElementById("button-holder");
-    while (buttonholder.firstChild) { //Deletes all buttons
-        buttonholder.removeChild(buttonholder.firstChild);
+class Quiz {
+    private questions: Question[];
+    private index: number;
+    private scores: number[];
+
+    constructor(questions: Question[]) {
+        this.questions = questions;
+        this.scores = Array(this.questions.length).fill(0);
+        this.index = 0;
     }
-    for (const quiz of Object.values(params.quizzes)) { //Creates new buttons based on the available quizzes
-        const newbutton = <HTMLButtonElement>document.createElement("BUTTON");
-        newbutton.innerHTML = quiz.name;
-        newbutton.classList.add("button");
-        newbutton.addEventListener("click", () => parse_questions(quiz));
-        buttonholder.appendChild(newbutton);
+
+    next(weight: number): boolean {
+        this.scores[this.index] = weight;
+        return ++this.index < this.questions.length;
+    }
+
+    prev(): boolean {
+        return --this.index >= 0;
+    }
+
+    get text(): string {
+        return this.questions[this.index].question;
+    }
+
+    get qn(): string {
+        return `Question ${this.index + 1} of ${this.questions.length}`;
+    }
+
+    get score(): number[] {
+        const keys = Object.keys(this.questions[0].effect);
+
+        const weightedScores = keys.map(k => this.scores.map((x, i) => this.questions[i].effect[k] * x));
+        const maxScores = keys.map(k => this.questions.map(x => Math.abs(x.effect[k])).reduce((pv, nv) => pv + nv, 0));
+
+        const reducedScores = weightedScores.map((x, i) => (x.reduce((pv, nv) => pv + nv, 0) + maxScores[i]) / (2 * maxScores[i]));
+        return reducedScores.map(x => Math.floor(x * 7));
     }
 }
 
-//Parses the questions from the selected quiz and creates the buttons
-async function parse_questions(quiz: QuizObj): Promise<void> {
-    quizName = quiz.name;
-    qn = 0;
-    max = {};
-    userScore = {};
-    questions = await (await fetch(quiz.url)).json();
-    const buttonholder = <HTMLDivElement>document.getElementById("button-holder")
-    while (buttonholder.firstChild) { //Deletes all buttons
-        buttonholder.removeChild(buttonholder.firstChild);
-    }
-    for (const [key, value] of Object.entries(params.buttons)) { //Adds all question buttons
-        const newbutton = <HTMLButtonElement>document.createElement("BUTTON");
-        newbutton.innerHTML = value.text;
-        newbutton.classList.add("button");
-        newbutton.classList.add(key);
-        newbutton.addEventListener("click", () => next_question(value.weight));
-        buttonholder.appendChild(newbutton);
-    }
-    let newbutton = <HTMLButtonElement>document.createElement("BUTTON"); //Adds back button
-    newbutton.innerHTML = "back";
-    newbutton.classList.add("small_button");
-    newbutton.addEventListener("click", prev_question);
-    buttonholder.appendChild(newbutton);
-    for (const axis of params.axes) { //Creates maximum score object and answer arrays 
-        userScore[axis] = new Array(questions.length);
-        max[axis] = 0;
-    }
-    for (const question of questions) { //Calculates maximum score
-        for (const axis of params.axes) {
-            max[axis] += Math.abs(question.effect[axis]);
+
+function addButtons<T>(buttonList: T[], fn: (b: T) => HTMLButtonElement, reset = true): void {
+    if (reset) {
+        while (buttonholder.firstChild) {
+            buttonholder.removeChild(buttonholder.firstChild);
         }
     }
-    init_question();
+    const buttons = buttonList.map(fn);
+    buttons.forEach(x => buttonholder.appendChild(x));
 }
 
-//Initializes the current question
-function init_question(): void {
-    document.getElementById("question-text")!.innerHTML = questions[qn].question;
-    document.getElementById("question-number")!.innerHTML = `Question ${qn + 1} of ${questions.length}`;
+function updateQuestions(quiz: Quiz): void {
+    quizText.textContent = quiz.text;
+    quizNumber.textContent = quiz.qn;
 }
 
-//Proceeds to the next question
-function next_question(mult: number): void {
-    for (const axis of params.axes) {
-        userScore[axis][qn] = mult * questions[qn].effect[axis];
+async function loadQuiz(quizParams: QuizObj, buttons: Record<string, QuizButton>, random: boolean): Promise<void> {
+    let questions = await loadJson<Question[]>(quizParams.url);
+    if (random) {
+        questions = randomizeArray(questions);
     }
-    qn++;
-    if (qn < questions.length) { //Re-initializes questions if questions are left, otherwise goes to results
-        init_question();
-    } else {
-        results();
-    }
+
+    document.title = `4Orbs - ${quizParams.name}`;
+    const quiz = new Quiz(questions);
+
+    addButtons(Object.entries(buttons), ([k, v]) => {
+        const btn = document.createElement("button");
+        btn.textContent = v.text;
+        btn.classList.add("button", k);
+
+        btn.addEventListener("click", () => {
+            if (quiz.next(v.weight)) {
+                updateQuestions(quiz);
+            } else {
+                const score = quiz.score;
+                const enc = scoreParser.encode(score, quizParams.name);
+                location.href = `results.html?${enc}`;
+            }
+        });
+
+        return btn;
+    });
+
+    addButtons([null], (_) => {
+        const btn = document.createElement("button");
+        btn.textContent = "back";
+        btn.classList.add("small-button");
+
+        btn.addEventListener("click", () => {
+            if (quiz.prev()) {
+                updateQuestions(quiz);
+            } else {
+                initialize();
+            }
+        });
+
+        return btn;
+    }, false);
+
+    updateQuestions(quiz);
 }
 
-//Returns to the previous question
-function prev_question(): void {
-    if (qn == 0) { //If first question returns to quiz selection menu
-        select_quiz();
-    } else { //Otherwise rolls question number 1 back and re-initalizes questions
-        qn--;
-        init_question();
-    }
+async function initialize(): Promise<void> {
+    const params = await loadJson<QuizParams>("params");
+
+    quizText.textContent = "Select a test to take:";
+    quizNumber.textContent = "Test selection";
+    document.title = "4Orbs - Quiz selection";
+
+    const quizzes = Object.values(params.quizzes).map(x => [[x, false], [x, true]]).flat(1) as [QuizObj, boolean][];
+
+    addButtons(quizzes, ([v, rand]) => {
+        const btn = document.createElement("button");
+        btn.textContent = v.name + (rand ? " (random)" : "");
+        btn.classList.add("button");
+        btn.addEventListener("click", () => loadQuiz(v, params.buttons, rand));
+        return btn;
+    });
 }
 
-//Calculates final scores and transfers them to the results page
-function results(): void {
-    const scoreObj: ScoreObj = {
-        quiz: quizName,
-        scores: {}
-    };
-    for (const axis of params.axes) {
-        const total: number = userScore[axis].reduce((a, b) => a + b, 0);
-        const ratio: number = (max[axis] + total) / (2 * max[axis]);
-        scoreObj.scores[axis] = Math.floor(ratio * 7);
-    }
-    location.href = "results.html?" + b64enc(JSON.stringify(scoreObj)) //Jumps to location of results page + base64 encoded json with answers
-}
+window.addEventListener("load", () => initialize()
+    .catch(e => {
+        console.error(e);
+        alert(String(e));
+    })
+);

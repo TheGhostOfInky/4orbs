@@ -1,8 +1,8 @@
-import { Orbs, cleanUrl } from "./commons.js";
-import type { NumObj, QuizParams, HeaderParams } from "./types";
+import { Orbs, cleanUrl, loadJson } from "./commons.js";
+import type { QuizParams, HeaderParams } from "./types";
 
 class TouchOrbs extends Orbs {
-    state: NumObj = {};
+    state: Record<string, number> = {};
     canvasElm: HTMLCanvasElement;
     hPars: HeaderParams;
     constructor(canvas: HTMLCanvasElement, qParams: QuizParams) {
@@ -23,15 +23,18 @@ class TouchOrbs extends Orbs {
         this.drawAll(this.hPars, this.state);
         this.preload();
     }
+
     private blank(index: number): void {
         const height = 150 + (175 * index);
         this.ctx.fillStyle = this.params.bg;
         this.ctx.fillRect(0, height, this.params.width, 180);
     }
+
     private blankHeader(): void {
         this.ctx.fillStyle = this.params.bg;
         this.ctx.fillRect(0, 0, this.params.width, 150);
     }
+
     async preload(): Promise<void> {
         for (const axis of Object.values(this.quizParams.images)) {
             for (const img of axis) {
@@ -85,12 +88,12 @@ const windowLoaded = new Promise<void>(resolve => {
 });
 
 const [pars, _] = await Promise.all(
-    [fetch("./dist/json/params.json"), windowLoaded]
+    [loadJson<QuizParams>("params"), windowLoaded]
 );
 
 const orbsCanvas = <HTMLCanvasElement>document.getElementById("custom-canvas")!;
 
-const _orbs = new TouchOrbs(orbsCanvas, await pars.json());
+const _orbs = new TouchOrbs(orbsCanvas, pars);
 
 const downloadButton = <HTMLButtonElement>document.getElementById("download-button")!;
 downloadButton.addEventListener("click", () => Orbs.downloadCanvas(orbsCanvas));
